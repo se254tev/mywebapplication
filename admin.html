@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+       <meta charset="UTF-8">
+       <meta name="viewport" content="width=device-width, initial-scale=1.0">
+       <title>Admin Interface</title>
+       <link rel="stylesheet" href="styles.css">
+   </head>
+   <body>
+       <h2>Add Announcement</h2>
+       <form id="announcement-form">
+           <input type="text" id="title" placeholder="Title" required>
+           <textarea id="summary" placeholder="Summary" required></textarea>
+           <textarea id="details" placeholder="Details" required></textarea>
+           <input type="text" id="media-url" placeholder="Media URL" required>
+           <select id="media-type">
+               <option value="image">Image</option>
+               <option value="video">Video</option>
+               <option value="document">Document</option>
+               <option value="link">Link</option>
+           </select>
+           <button type="submit">Add Announcement</button>
+       </form>
+
+       <h2>Add Discussion</h2>
+       <form id="discussion-form">
+           <input type="text" id="discussion-title" placeholder="Title" required>
+           <textarea id="discussion-summary" placeholder="Summary" required></textarea>
+           <textarea id="discussion-details" placeholder="Details" required></textarea>
+           <input type="text" id="discussion-media-url" placeholder="Media URL" required>
+           <select id="discussion-media-type">
+               <option value="image">Image</option>
+               <option value="video">Video</option>
+               <option value="document">Document</option>
+               <option value="link">Link</option>
+           </select>
+           <button type="submit">Add Discussion</button>
+       </form>
+
+       <script>
+           document.getElementById('announcement-form').addEventListener('submit', function(event) {
+               event.preventDefault();
+
+               const title = document.getElementById('title').value;
+               const summary = document.getElementById('summary').value;
+               const details = document.getElementById('details').value;
+               const mediaUrl = document.getElementById('media-url').value;
+               const mediaType = document.getElementById('media-type').value;
+
+               fetch('http://192.132.125:5000/api/announcement/add', {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json'
+                   },
+                   body: JSON.stringify({
+                       title,
+                       summary,
+                       details,
+                       media: [{ type: mediaType, url: mediaUrl }]
+                   })
+               })
+               .then(response => response.json())
+               .then(data => {
+                   console.log('Success:', data);
+                   alert('Announcement added successfully');
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+                   alert('Error adding announcement');
+               });
+           });
+
+           document.getElementById('discussion-form').addEventListener('submit', function(event) {
+               event.preventDefault();
+
+               const title = document.getElementById('discussion-title').value;
+               const summary = document.getElementById('discussion-summary').value;
+               const details = document.getElementById('discussion-details').value;
+               const mediaUrl = document.getElementById('discussion-media-url').value;
+               const mediaType = document.getElementById('discussion-media-type').value;
+
+               fetch('http://192.132.125:5000/api/discussion/add', {
+                   method: 'POST',
+                   headers: {
+                       'Content-Type': 'application/json'
+                   },
+                   body: JSON.stringify({
+                       title,
+                       summary,
+                       details,
+                       media: [{ type: mediaType, url: mediaUrl }]
+                   })
+               })
+               .then(response => response.json())
+               .then(data => {
+                   console.log('Success:', data);
+                   alert('Discussion added successfully');
+               })
+               .catch(error => {
+                   console.error('Error:', error);
+                   alert('Error adding discussion');
+               });
+           });
+       </script>
+   </body>
+</html>
